@@ -5,8 +5,8 @@ app.use('/', express.static('frontend'))
 
 //definire endpoint GET la adresa /hello
 app.get('/hello', (request, response) => {
-    response.status(200).json({hello:"Miruna;)"})
+    response.status(200).json({hello: process.env})
 })
 
 
-app.listen(8080, () => console.log("Service has started"));
+app.listen(process.env.PORT||8080, () => console.log("Service has started"));
