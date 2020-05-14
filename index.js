@@ -1,7 +1,7 @@
 const express = require("express")
 const app = express()
 
-app.use('/', express.static('frontend'))
+app.use(express.static(__dirname + "/frontend"));
 
 //definire endpoint GET la adresa /hello
 app.get('/hello', (request, response) => {
