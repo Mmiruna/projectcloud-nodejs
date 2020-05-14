@@ -6,7 +6,7 @@
 
     const yTextarea =  document.getElementById('yTextarea');
 
-    const translateBtn = document.getElementById('translateBtn')
+    const translateBtn = document.getElementById('translateBtn');
 
     var apiHelper = (function(){
         const KEY = 'trnsl.1.1.20200513T145830Z.1a227ecfd85acf4d.3aa3e756629a23f5f675082107815457ac60486a';
@@ -16,7 +16,8 @@
         const yandexTranslateOrigin = 'https://translate.yandex.net';
         const yandexBaseAPI = `${yandexTranslateOrigin}/api/v1.5/tr.json`;
 
-        const funnyTranslateOrigin = "http://api.funtranslations.com/translate";
+        const funnyTranslateOrigin = "http://api.funtranslations.com";
+        const funnyBaseApi= `${funnyTranslateOrigin}/translate`;
         const funnyKey = "of_NurCLjLvXoCKEwozV1AeF"
     
         // to prevent cors in the browser
@@ -30,7 +31,7 @@
     
         async function callApi(type, req, success) {
             var url = req.params ? req.url + encodeURI(req.params) : req.url;
-            const response = await fetch(url, {
+            const response = await fetch(withCors(url), {
                 method: type,
                 headers: req.headers
             });
@@ -45,6 +46,9 @@
                     key: KEY,
                     ui: FROM
                 },
+                headers: {
+                    Origin: yandexTranslateOrigin
+                }
             }
     
             callApi("GET", req, response => {
@@ -62,6 +66,9 @@
                     key: KEY,
                     lang: from + "-" + TO,
                     text: sourceText
+                },
+                headers: {
+                    Origin: yandexTranslateOrigin
                 }
             }
     
@@ -73,9 +80,10 @@
 
         function funnyTranslate(type, text, callback){
             var req = {
-                url: funnyTranslateOrigin + "/yoda.json",
+                url: funnyBaseApi + "/yoda.json",
                 headers: {
-                    'X-Funtranslations-Api-Secret': funnyKey
+                    'X-Funtranslations-Api-Secret': funnyKey,
+                    Origin: funnyTranslateOrigin
                 },
                 params: {
                     text: text,
